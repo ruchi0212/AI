@@ -1,0 +1,146 @@
+# Undirected Graph
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'D', 'E'],
+    'C': ['A', 'E'],
+    'D': ['B'],
+    'E': ['B', 'C']
+}
+
+# DFS Function
+def dfs(graph, node, visited):
+    if node not in visited:
+        print(node, end=" ")
+        visited.add(node)  # use set
+        for neighbour in graph[node]:
+            dfs(graph, neighbour, visited)
+
+# BFS Function
+def bfs(graph, start):
+    visited = set()
+    queue = [start]
+
+    while queue:
+        node = queue.pop(0)
+        if node not in visited:
+            print(node, end=" ")
+            visited.add(node)
+            for neighbour in graph[node]:
+                if neighbour not in visited:
+                    queue.append(neighbour)
+
+# Run Traversals
+print("DFS Traversal:")
+dfs(graph, 'A', set())
+
+print("\nBFS Traversal:")
+bfs(graph, 'A')
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+      
+Let me analyze the DFS and BFS traversal algorithms you've shared for an undirected graph.
+
+## Graph Traversal Algorithms Analysis
+
+This code implements Depth-First Search (DFS) and Breadth-First Search (BFS) traversals on an undirected graph. The graph is represented as an adjacency list.
+
+When executed, it produces this output:
+```
+DFS Traversal:
+A B D E C
+BFS Traversal:
+A B C D E
+```
+
+## Algorithm Breakdown
+
+### DFS (Depth-First Search)
+The DFS implementation uses recursion to explore as far as possible along each branch before backtracking.
+
+Key steps:
+1. Visit the current node and mark it as visited
+2. For each unvisited neighbor, recursively call DFS
+3. Continue until all reachable nodes are visited
+
+### BFS (Breadth-First Search)
+The BFS implementation uses a queue to explore all neighbors at the present depth before moving to nodes at the next depth level.
+
+Key steps:
+1. Start with initial node in the queue
+2. While queue is not empty:
+   - Remove the first node from queue
+   - Process the node if not visited
+   - Add all unvisited neighbors to the queue
+3. Continue until queue is empty
+
+## Space and Time Complexity
+
+### DFS Complexity
+- **Time Complexity**: O(V + E), where V is the number of vertices and E is the number of edges
+  - Each vertex is processed once: O(V)
+  - Each edge is considered once: O(E)
+  
+- **Space Complexity**: O(V)
+  - Recursion stack in worst case: O(V) (for a linear graph)
+  - Visited set: O(V)
+
+### BFS Complexity
+- **Time Complexity**: O(V + E)
+  - Each vertex is processed once: O(V)
+  - Each edge is considered once: O(E)
+  
+- **Space Complexity**: O(V)
+  - Queue can contain at most all vertices: O(V)
+  - Visited set: O(V)
+
+## Typical Viva Questions and Answers
+
+1. **What are the key differences between DFS and BFS?**
+   - DFS explores as far as possible along each branch before backtracking, while BFS explores all neighbors at the current depth before moving to the next level
+   - DFS typically uses a stack (or recursion), while BFS uses a queue
+   - DFS may not find the shortest path, while BFS always finds the shortest path in unweighted graphs
+
+2. **Which traversal method finds the shortest path in an unweighted graph?**
+   - BFS always finds the shortest path in terms of the number of edges in an unweighted graph
+
+3. **When would you prefer DFS over BFS?**
+   - When you need to search all the way to a leaf node (e.g., solving puzzles, mazes)
+   - When memory is a constraint (BFS stores more nodes in memory)
+   - For problems like topological sorting, cycle detection, or finding connected components
+
+4. **When would you prefer BFS over DFS?**
+   - When finding the shortest path in unweighted graphs
+   - When the solution is likely to be closer to the root
+   - For level-order traversals
+   - For finding all nodes at a given distance from the start
+
+5. **How would you modify the DFS to detect cycles in an undirected graph?**
+   - Keep track of the parent of each node
+   - If you encounter a visited node that is not the parent of the current node, there is a cycle
+
+6. **What happens if the graph is disconnected?**
+   - The algorithms will only traverse the component connected to the starting node
+   - To traverse the entire graph, you would need to call the functions for each unvisited node
+
+7. **How is the space complexity affected by the graph structure?**
+   - In DFS, a deep graph can cause the recursion stack to grow to O(V)
+   - In BFS, a wide graph can cause the queue to grow to O(V)
+
+8. **What are real-world applications of these traversal methods?**
+   - DFS: Topological sorting, maze generation, pathfinding, cycle detection
+   - BFS: Shortest path finding, social network analysis, web crawling, garbage collection
+
+9. **How would you implement iterative DFS instead of recursive?**
+   - Use an explicit stack instead of the recursion stack
+   - Push the starting node onto the stack
+   - While stack is not empty, pop a node, process it, and push all unvisited neighbors
+
+10. **What's the impact of using a set vs. a list for tracking visited nodes?**
+    - Sets provide O(1) lookup time for checking if a node is visited
+    - Lists would require O(n) lookup time, making the algorithm less efficient
+
+11. **How would you modify these algorithms to return the path taken rather than just printing nodes?**
+    - For DFS: Build and return a list of visited nodes
+    - For BFS: Maintain a parent dictionary to reconstruct the path from start to any node
+
+This analysis covers the key aspects that would typically be discussed in a viva question about graph traversal algorithms.
