@@ -1,0 +1,242 @@
+G = [[0, 1, 1, 0, 1, 0],
+     [1, 0, 1, 1, 0, 1],
+     [1, 1, 0, 1, 1, 0],
+     [0, 1, 1, 0, 0, 1],
+     [1, 0, 1, 0, 0, 1],
+     [0, 1, 0, 1, 1, 0]]
+nodes = "abcdef"
+t_ = {nodes[i]: i for i in range(len(G))}
+degree = [sum(G[i]) for i in range(len(G))]
+colorDict = {nodes[i]: ["Blue", "Red", "Yellow", "Green"] for i in range(len(G))}
+sortedNodes = []
+used_indices = []
+for _ in range(len(degree)):
+    _max = -1
+    idx = -1
+    for j in range(len(degree)):
+        if j not in used_indices and degree[j] > _max:
+            _max = degree[j]
+            idx = j
+    used_indices.append(idx)
+    sortedNodes.append(nodes[idx])
+solution = {}
+for n in sortedNodes:
+    setColor = colorDict[n][0]  # Pick first available color
+    solution[n] = setColor
+    for j in range(len(G[t_[n]])):
+        if G[t_[n]][j] == 1 and setColor in colorDict[nodes[j]]:
+            colorDict[nodes[j]].remove(setColor)
+print("Graph Coloring Result:")
+for node, color in sorted(solution.items()):
+    print(f"Node {node} = {color}")
+
+________________________________________
+1. Define the graph G as an adjacency matrix
+G = [[0, 1, 1, 0, 1, 0],
+     [1, 0, 1, 1, 0, 1],
+     [1, 1, 0, 1, 1, 0],
+     [0, 1, 1, 0, 0, 1],
+     [1, 0, 1, 0, 0, 1],
+     [0, 1, 0, 1, 1, 0]]
+•	G is a 6x6 adjacency matrix representing a graph.
+•	1 means there is an edge between nodes; 0 means no edge.
+•	For example, G[0][1] = 1 means node 0 is connected to node 1.
+________________________________________
+2. Define the node labels
+nodes = "abcdef"
+•	The 6 nodes in the graph are labeled 'a' to 'f'.
+________________________________________
+3. Create a mapping from node names to indices
+t_ = {nodes[i]: i for i in range(len(G))}
+•	t_ is a dictionary to convert node names to their corresponding indices in the adjacency matrix.
+•	Example: t_['a'] = 0, t_['f'] = 5.
+________________________________________
+4. Calculate the degree of each node
+degree = [sum(G[i]) for i in range(len(G))]
+•	Degree = number of edges connected to the node.
+•	Example: if row 0 is [0, 1, 1, 0, 1, 0], then degree[0] = 3.
+________________________________________
+5. Initialize available colors for each node
+colorDict = {nodes[i]: ["Blue", "Red", "Yellow", "Green"] for i in range(len(G))}
+•	Every node is initially allowed to take any of the 4 colors.
+________________________________________
+6. Sort nodes in descending order of degree (greedy step)
+
+🔤 1. nodes = "abcdef"
+•	nodes is a string representing the names of graph nodes: 'a', 'b', 'c', 'd', 'e', 'f'.
+________________________________________
+🔢 2. t_ = {nodes[i]: i for i in range(len(G))}
+•	This creates a dictionary t_ mapping each node name to its index in the graph G.
+•	Example: {'a': 0, 'b': 1, ..., 'f': 5}.
+•	Useful for quickly looking up a node's index in the adjacency matrix G.
+________________________________________
+📊 3. degree = [sum(G[i]) for i in range(len(G))]
+•	Computes the degree of each node — i.e., the number of edges connected to the node.
+•	G is assumed to be an adjacency matrix (2D list of 0s and 1s).
+•	sum(G[i]) gives the number of 1s in the i-th row, meaning how many neighbors node i has.
+________________________________________
+🎨 4. colorDict = {nodes[i]: ["Blue", "Red", "Yellow", "Green"] for i in range(len(G))}
+•	Each node starts with all 4 color options available.
+•	This dict will later be updated as nodes are assigned colors and neighbors eliminate choices.
+________________________________________
+📍 5. sortedNodes = []
+•	Will store the nodes sorted by descending degree — i.e., start coloring with the most connected node.
+________________________________________
+🔁 6. used_indices = []
+•	Keeps track of which node indices have already been added to sortedNodes.
+________________________________________
+🔄 7. Sorting Loop
+for _ in range(len(degree)):
+    _max = -1
+    idx = -1
+    for j in range(len(degree)):
+        if j not in used_indices and degree[j] > _max:
+            _max = degree[j]
+            idx = j
+    used_indices.append(idx)
+    sortedNodes.append(nodes[idx])
+•	This loop sorts the nodes by degree (highest first):
+o	For each pass, it finds the unused node with the highest degree.
+o	Adds its index to used_indices.
+o	Adds its name (e.g., 'c') to sortedNodes.
+________________________________________
+🗂️ 8. solution = {}
+•	This will store the final color assignment for each node.
+•	Example after completion: {'a': 'Red', 'b': 'Blue', ...}
+________________________________________
+7. Assign colors to nodes greedily
+solution = {}
+for n in sortedNodes:
+    setColor = colorDict[n][0]  # Pick first available color
+    solution[n] = setColor
+•	Go through the sorted nodes and assign the first available color from colorDict.
+________________________________________
+8. Remove the assigned color from neighbor nodes’ options
+    for j in range(len(G[t_[n]])):
+        if G[t_[n]][j] == 1 and setColor in colorDict[nodes[j]]:
+            colorDict[nodes[j]].remove(setColor)
+•	For each neighbor of the current node, remove the assigned color from their available colors.
+•	This ensures no two adjacent nodes get the same color.
+________________________________________
+9. Print the final coloring solution
+print("Graph Coloring Result:")
+for node, color in sorted(solution.items()):
+    print(f"Node {node} = {color}")
+•	Display the color assigned to each node, sorted alphabetically.
+________________________________________
+Example Output (may vary based on graph):
+Graph Coloring Result:
+Node a = Blue
+Node b = Red
+Node c = Yellow
+Node d = Blue
+Node e = Red
+Node f = Yellow
+________________________________________
+Compare Backtracking and Branch and Bound. 
+● Backtracking: Tries all possibilities, skips invalid ones. ● Branch and Bound: Uses cost to cut down unnecessary paths.
+  What is a Constraint Satisfaction Problem (CSP)?
+ Problems with rules/conditions (constraints) that must be satisfied. Example: Sudoku, N-Queen. ________________________________________
+1. What is the purpose of this code?
+•	Answer:
+The code implements a greedy graph coloring algorithm, which assigns colors to nodes in a graph such that no two adjacent nodes have the same color. It does this by sorting the nodes in descending order of their degree and then assigning the first available color to each node.
+________________________________________
+2. What is the significance of sorting the nodes based on their degree?
+•	Answer:
+Sorting the nodes by degree ensures that the nodes with the highest number of connections (edges) are colored first. This is part of the greedy approach, which prioritizes nodes that have the highest potential to constrain color assignments for other nodes. This method often leads to an efficient solution.
+________________________________________
+3. How are the neighbors of each node handled in this algorithm?
+•	Answer:
+The algorithm ensures that a node's color doesn't conflict with its neighbors. Once a color is assigned to a node, that color is removed from the list of available colors for the node's neighbors. This ensures that adjacent nodes do not share the same color.
+________________________________________
+4. Why does the code use colorDict and how is it initialized?
+•	Answer:
+colorDict is a dictionary that stores the available colors for each node. Initially, every node can take any of the 4 colors: "Blue", "Red", "Yellow", and "Green". As nodes are colored, the available colors for neighboring nodes are updated to prevent adjacent nodes from being assigned the same color.
+________________________________________
+5. What is the role of the sortedNodes list?
+•	Answer:
+The sortedNodes list stores the nodes in order of their degree, with nodes having the highest degree coming first. This list is crucial for the greedy coloring approach, as it ensures that nodes with the highest degree are colored first, minimizing the chances of a color conflict.
+________________________________________
+6. What does the used_indices list do in this code?
+•	Answer:
+The used_indices list tracks the indices of nodes that have already been processed. This prevents the algorithm from reprocessing nodes and ensures that each node is colored only once.
+________________________________________
+7. How does the algorithm ensure that no two adjacent nodes are colored the same?
+•	Answer:
+The algorithm removes the assigned color from the list of available colors for each neighboring node. This way, when it colors a node, its neighbors cannot take the same color. The first available color from the remaining options is assigned to each node.
+________________________________________
+8. What happens if a node has no available colors left?
+•	Answer:
+In this specific implementation, the algorithm assumes that the graph can always be colored using the available colors. If a node has no available color left, it would imply that the graph is not properly colored, but since the graph is assumed to be 4-colorable, this scenario doesn't occur in the code.
+________________________________________
+9. What is the time complexity of this algorithm?
+•	Answer:
+The time complexity of this algorithm is O(V^2), where V is the number of nodes (vertices) in the graph. This is because:
+o	Sorting the nodes by degree takes O(V log V).
+o	For each node, we check all its neighbors to update the available colors, which takes O(V) per node. Hence, the total complexity is O(V^2).
+________________________________________
+10. How does this algorithm compare with other graph coloring algorithms like backtracking?
+•	Answer:
+This algorithm is a greedy approach, which aims to quickly find a solution by choosing the most optimal decision at each step. While it is faster and simpler, it doesn't guarantee the minimum number of colors (optimal solution) in all cases. In contrast, backtracking algorithms explore all possibilities and guarantee an optimal solution, but they tend to be slower and computationally expensive.
+________________________________________
+11. Can this algorithm be applied to non-connected graphs?
+•	Answer:
+Yes, this algorithm can be applied to non-connected graphs as well. The greedy coloring method works regardless of whether the graph is connected or disconnected. The process will color each connected component independently, ensuring that no two adjacent nodes within each component share the same color.
+________________________________________
+12. What are the practical applications of graph coloring?
+•	Answer:
+Graph coloring has several practical applications, including:
+o	Scheduling problems, where tasks (nodes) with dependencies (edges) must be assigned non-overlapping time slots (colors).
+o	Register allocation in compilers, where variables (nodes) must be assigned registers (colors) without conflicts.
+o	Frequency assignment in mobile networks, where cells (nodes) must be assigned frequencies (colors) that do not interfere with neighboring cells.
+________________________________________
+________________________________________
+14. Can this approach be used for solving other constraint satisfaction problems?
+•	Answer:
+Yes, backtracking is a general technique used to solve a variety of constraint satisfaction problems (CSPs), including problems like Sudoku, graph coloring, knapsack problem, traveling salesman problem, and crossword puzzles, where the goal is to find a solution that satisfies a set of constraints.
+________________________________________
+1.	Q: What is a Constraint Satisfaction Problem (CSP)?
+A: A CSP is a problem composed of variables, domains for those variables, and constraints that restrict the values the variables can take.
+2.	Q: What are the three main components of a CSP?
+A:
+o	X: Set of variables
+o	D: Set of domains for each variable
+o	C: Set of constraints among the variables
+3.	Q: What is the objective in a CSP?
+A: To assign values to variables such that all constraints are satisfied.
+4.	Q: What is the difference between local search and CSP solving?
+A: Local search doesn’t consider constraints explicitly, while CSP solving is focused on satisfying all constraints during the search.
+________________________________________
+🎨 Graph Coloring Specific Questions
+5.	Q: What is the Graph Coloring problem?
+A: It involves assigning colors to graph vertices so that no two adjacent vertices share the same color.
+6.	Q: What is a chromatic number of a graph?
+A: The smallest number of colors needed to color a graph properly.
+7.	Q: What is a k-colorable graph?
+A: A graph that can be colored using at most k colors without any two adjacent vertices sharing the same color.
+8.	Q: What is the greedy coloring algorithm?
+A: It's a heuristic where we assign the smallest available color to each vertex in a specific order, avoiding colors used by its neighbors.
+9.	Q: Does greedy coloring always give an optimal solution?
+A: No, greedy coloring does not always produce the minimal number of colors; it depends on the order of vertices.
+10.	Q: What is the time complexity of greedy graph coloring?
+A: O(V²) in the worst case if we check all neighbors for every vertex.
+________________________________________
+🧠 Deeper Understanding and Application Questions
+11.	Q: Give a real-world example of CSP.
+A: Scheduling exams where no student has overlapping papers; each subject is a variable, timeslots are domains, and constraints are based on student enrollments.
+12.	Q: What is the role of domain and constraint in CSP?
+A: Domains define the possible values a variable can take; constraints restrict which combinations of variable assignments are allowed.
+13.	Q: How does graph coloring relate to CSP?
+A: In CSP terms, each vertex is a variable, the domain is the list of available colors, and the constraint is that adjacent vertices must not share the same color.
+14.	Q: What is the worst-case number of colors greedy coloring may use?
+A: (Δ + 1), where Δ is the maximum degree of any vertex in the graph.
+15.	Q: What is backtracking in CSP and how is it different from greedy?
+A: Backtracking explores all possible assignments and backtracks when constraints are violated. Greedy selects the most immediate valid choice without backtracking.
+________________________________________
+🧪 Possible Practical/Viva Extensions
+16.	Q: What is a complete graph’s chromatic number?
+A: For a complete graph with n vertices, the chromatic number is n, since each vertex is adjacent to all others.
+17.	Q: Can greedy coloring fail to find the optimal coloring? Give an example.
+A: Yes. For example, in a crown graph, greedy may use more colors depending on the order of vertices, even though the graph is 2-colorable.
+18.	Q: How does the order of vertices affect greedy coloring?
+A: The order can lead to suboptimal solutions — different orders may use fewer or more colors.
