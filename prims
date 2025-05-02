@@ -1,0 +1,88 @@
+graph = {
+    'A': [('B', 2), ('C', 3)],
+    'B': [('A', 2), ('C', 1), ('D', 1)],
+    'C': [('A', 3), ('B', 1), ('D', 4)],
+    'D': [('B', 1), ('C', 4)]
+}
+ 
+def prim(graph, start):
+    visited = []
+    edges = []
+    total_cost = 0
+ 
+    visited.append(start)
+     
+ 
+    while len(visited) < len(graph):
+        min_edge = None
+        min_weight = float('inf')
+ 
+        for node in visited:
+            for neighbour, weight in graph[node]:
+                if neighbour not in visited and weight < min_weight:
+                    min_edge = (node, neighbour)
+                    min_weight = weight
+        
+        if min_edge:
+            print(f"Edge selected: {min_edge[0]} - {min_edge[1]} with weight {min_weight}")
+            visited.append(min_edge[1])
+            total_cost += min_weight
+ 
+    print("Total Minimum Cost:", total_cost)
+ 
+prim(graph, 'A')
+
+
+🔹 Time Complexity:
+O((V + E) log V)
+V = number of vertices
+E = number of edges
+
+🔹 Space Complexity:
+O(V + E)
+
+Algorithm Steps
+
+1.Start with a single vertex (in this case 'A')
+2.Add it to the visited set
+3.In each iteration:
+ -->Find the minimum weight edge connecting any visited node to any unvisited node
+ -->Add the unvisited endpoint to the visited set
+ -->Add the edge weight to the total cost
+4.Continue until all nodes are visited
+
+
+## Typical Viva Questions and Answers
+
+1. **What is Prim's algorithm?**
+   - Prim's algorithm is a greedy algorithm used to find the minimum spanning tree of a connected, undirected graph with weighted edges.
+
+2. **What is a Minimum Spanning Tree (MST)?**
+   - A minimum spanning tree is a subset of edges that connects all vertices in the graph with the minimum possible total edge weight, without forming any cycles.
+
+3. **How does Prim's algorithm differ from Kruskal's algorithm?**
+   - Prim's algorithm starts with a single vertex and grows the MST one vertex at a time, always adding the lowest-weight edge that connects the tree to a new vertex.
+   - Kruskal's algorithm sorts all edges by weight and adds them to the MST if they don't create a cycle, regardless of connectivity to the existing tree.
+
+4. **What are the limitations of this implementation?**
+   - The implementation has O(V²) time complexity, which is not optimal for sparse graphs
+   - It doesn't handle disconnected graphs
+   - It doesn't verify if the input graph is undirected
+
+5. **How could you optimize this implementation?**
+   - Use a priority queue (min-heap) to efficiently find the next minimum-weight edge
+   - This would improve time complexity to O(E log V)
+
+6. **Is this implementation handling disconnected graphs?**
+   - No, it assumes the graph is connected. If the graph is disconnected, it will only find an MST for the component containing the start vertex.
+
+7. **Does Prim's algorithm always find the optimal solution?**
+   - Yes, Prim's algorithm is guaranteed to find the minimum spanning tree for a connected, undirected graph.
+
+8. **What applications use Prim's algorithm in real-world scenarios?**
+   - Network design (minimizing cable length)
+   - Circuit design
+   - Cluster analysis
+   - Approximating traveling salesman problem
+
+This analysis covers the key aspects that would typically be discussed in a viva question about Prim's algorithm implementation and complexity.
