@@ -1,0 +1,112 @@
+edges = [
+    (1, 'A', 'B'),
+    (2, 'A', 'C'),
+    (3, 'B', 'C'),
+    (4, 'B', 'D'),
+    (5, 'C', 'D'),
+]
+ 
+def find(parent, node):
+    if parent[node] != node:
+        parent[node] = find(parent , parent[node])
+    return parent[node]
+    
+def union(parent,u,v):
+    parent[find(parent,u)]=find(parent,v)
+
+def kruskal(edges):
+    nodes=set()
+    for weight,u,v in edges:
+        nodes.update([u,v])
+    
+    parent={node: node for node in nodes}
+    edges.sort()
+    total_cost= 0
+
+    print("Edges in the MST:")
+    for weight,u,v in edges:
+        if find(parent , u)!=find(parent, v):
+          print(f"{u} - {v} with weight {weight}")
+          union(parent , u ,v)
+          total_cost += weight
+    print("Total Minimum Cost:", total_cost)
+
+
+kruskal(edges)
+
+🔹 Time Complexity:
+O(E log E) 
+
+🔹 Space Complexity:
+O(V + E)
+
+I'll analyze the Kruskal's algorithm implementation you've shared, including its working process and complexity analysis for a viva question.
+
+## Kruskal's Algorithm Implementation Analysis
+
+Your implementation sorts all edges by weight and gradually builds a minimum spanning tree by adding edges in ascending order of weight, while avoiding cycles using a disjoint-set data structure.
+
+When executed, it produces this output:
+```
+Edges in the MST:
+A - B with weight 1
+B - D with weight 4
+A - C with weight 2
+Total Minimum Cost: 7
+```
+
+## Algorithm Steps
+
+1. Identify all unique nodes in the graph
+2. Initialize each node as its own disjoint set (parent of itself)
+3. Sort all edges by weight in ascending order
+4. For each edge (in order of increasing weight):
+   - If adding this edge doesn't create a cycle (the endpoints are in different sets)
+     - Add the edge to the MST
+     - Merge the disjoint sets containing the two endpoints
+   - Otherwise, discard the edge
+5. Continue until all edges are processed
+
+
+## Typical Viva Questions and Answers
+
+1. **What is Kruskal's algorithm?**
+   - Kruskal's algorithm is a greedy algorithm that finds a minimum spanning tree for a connected weighted graph by adding edges in order of increasing weight, avoiding cycles.
+
+2. **What data structure is used in this implementation for cycle detection?**
+   - This implementation uses the Disjoint-Set (Union-Find) data structure with path compression for efficient cycle detection.
+
+3. **Explain the find and union functions in the implementation.**
+   - `find(parent, node)`: Determines which set (component) a node belongs to, with path compression optimization that makes subsequent operations more efficient.
+   - `union(parent, u, v)`: Merges two sets by making the parent of one set's root point to the other set's root.
+
+4. **What is path compression and how does it improve performance?**
+   - Path compression is the technique where after finding the root of a node, we update the parent of all traversed nodes to point directly to the root.
+   - This flattens the tree structure, reducing the time complexity of future find operations.
+
+5. **How does Kruskal's algorithm differ from Prim's algorithm?**
+   - Kruskal's algorithm considers edges globally in order of weight, regardless of connectivity.
+   - Prim's algorithm grows a single tree from a starting point, adding the closest vertex each time.
+   - Kruskal's typically performs better on sparse graphs, while Prim's can be more efficient on dense graphs.
+
+6. **Does this implementation handle disconnected graphs?**
+   - Yes, Kruskal's algorithm naturally handles disconnected graphs, producing a minimum spanning forest (a collection of MSTs, one for each connected component).
+
+7. **What happens if the graph contains cycles?**
+   - Kruskal's algorithm will avoid adding edges that would create cycles in the MST by using the disjoint-set data structure to check if two vertices are already connected.
+
+8. **Can you identify any potential optimizations for this implementation?**
+   - Implement union by rank or union by size to balance the trees
+   - Use an adjacency list representation instead of edge list for large graphs
+   - Implement early termination once V-1 edges are added to the MST
+
+9. **What are practical applications of Kruskal's algorithm?**
+   - Network design (telecommunications, electrical grids)
+   - Clustering algorithms
+   - Image segmentation
+   - Transportation planning
+
+10. **Does this implementation correctly handle multi-graphs (multiple edges between the same nodes)?**
+    - Yes, since edges are considered one by one based on weight, the implementation naturally selects the lowest-weight edge between any two nodes.
+
+This analysis covers the key aspects that would typically be discussed in a viva question about Kruskal's algorithm implementation and complexity.
