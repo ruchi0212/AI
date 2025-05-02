@@ -1,0 +1,86 @@
+import random
+responses = {
+    "hi": ["Hello! Welcome to ShopEase. How can I help you today?"],
+    "hello": ["Hi there! How may I assist you at ShopEase?"],
+    "store hours": ["Our store is open from 9 AM to 9 PM, Monday through Saturday."],
+    "order status": ["You can check your order status by logging into your account on our website."],
+    "return policy": ["We offer a 30-day return policy with a full refund if the item is unused and in original packaging."],
+    "contact": ["You can reach our support team at support@shopease.com or call 1800-123-456."],
+    "bye": ["Goodbye! Thank you for visiting ShopEase."],
+    "default": [
+        "I'm sorry, I didn't understand that. Could you please rephrase?",
+        "Hmm, I couldn't catch that. Try asking about store hours, return policy, or contact info."
+    ]
+}
+def get_bot_response(user_message):
+    return random.choice(responses.get(user_message, responses["default"]))
+print("Welcome to ShopEase Customer Support Chatbot!")
+print("You can ask about 'store hours', 'order status', 'return policy', or 'contact'.")
+print("Type 'bye' to end the conversation.\n")
+while True:
+    user_message = input("You: ").lower()
+    if user_message == "bye":
+        print("Bot:", random.choice(responses["bye"]))
+        break
+    else:
+        print("Bot:", get_bot_response(user_message))
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  ## Chatbot Algorithm (4 Points)
+
+1. **Initialize** a dictionary mapping keywords to response lists and set default responses.
+
+2. **Process Input** by converting user text to lowercase and checking if it exists in the dictionary.
+
+3. **Select Response** by choosing randomly from matching keyword's response list or from default responses if no match.
+
+4. **Loop Until Exit** condition ("bye") is detected, continuously processing inputs and displaying responses.
+
+  ------------------------------------------------------------------------------------------------------------------
+
+Here are some simple one-line questions that might be asked in a practical exam for the chatbot code, along with concise answers:
+
+1. **Q: What is the primary data structure used in this chatbot implementation?**
+   A: Dictionary (hash map) for storing response patterns and their corresponding replies.
+
+2. **Q: What function is used to select responses and why?**
+   A: `random.choice()` to randomly select one response from multiple options, making the chatbot seem less repetitive.
+
+3. **Q: How does the chatbot handle unrecognized user input?**
+   A: It returns a random message from the "default" category using fallback responses.
+
+4. **Q: What is the time complexity of the response lookup in this chatbot?**
+   A: O(1) - constant time using dictionary key lookup.
+
+5. **Q: What method is used to standardize user input in this chatbot?**
+   A: The `.lower()` method is used to convert all input to lowercase for case-insensitive matching.
+
+6. **Q: How does the chatbot terminate a conversation?**
+   A: It checks if the user input is "bye" and breaks the loop if true.
+
+7. **Q: What is the main limitation of this rule-based chatbot?**
+   A: It can only respond to exact keyword matches and lacks natural language understanding.
+
+8. **Q: How would you improve the chatbot to handle partial keyword matching?**
+   A: By checking if keywords are contained within the user's message rather than exact matches.
+
+9. **Q: What would be needed to make this chatbot context-aware?**
+   A: Adding state variables to track the conversation context and previous interactions.
+
+10. **Q: How does the bot notify users about available commands?**
+    A: Through print statements at the beginning that list available query topics.
+
+11. **Q: Why is the responses dictionary organized with lists of responses for each key?**
+    A: To allow multiple possible responses for the same input, adding variety to the conversation.
+
+12. **Q: What algorithm pattern does this chatbot follow?**
+    A: Pattern matching/lookup table algorithm with predefined responses.
+
+13. **Q: How would you implement a logging system for this chatbot?**
+    A: By adding code to record user inputs and bot responses to a file or database.
+
+14. **Q: What's the difference between this rule-based chatbot and an AI-based one?**
+    A: This chatbot uses predefined rules and patterns while AI-based ones use machine learning to understand intent.
+
+15. **Q: How could fuzzy matching improve this chatbot?**
+    A: It would allow the chatbot to handle typos and variations in user input through approximate string matching.
